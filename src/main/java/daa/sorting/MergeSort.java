@@ -1,9 +1,11 @@
 package com.daa.sorting;
 
 import com.daa.metrics.Metrics;
+
 import java.util.Arrays;
 
 public class MergeSort {
+
     public static void mergeSort(int[] array) {
         if (array.length <= 10) {
             insertionSort(array);
@@ -13,27 +15,29 @@ public class MergeSort {
             int[] left = Arrays.copyOfRange(array, 0, mid);
             int[] right = Arrays.copyOfRange(array, mid, array.length);
 
-            Metrics.updateRecursionDepth(Metrics.getMaxRecursionDepth() + 1);
             mergeSort(left);
             mergeSort(right);
 
-            Metrics.updateRecursionDepth(Metrics.getMaxRecursionDepth() - 1);
             merge(array, left, right);
         }
     }
 
     private static void merge(int[] array, int[] left, int[] right) {
         int i = 0, j = 0, k = 0;
+        int[] buffer = new int[left.length + right.length];
+
         while (i < left.length && j < right.length) {
             Metrics.incrementComparisons();
             if (left[i] <= right[j]) {
-                array[k++] = left[i++];
+                buffer[k++] = left[i++];
             } else {
-                array[k++] = right[j++];
+                buffer[k++] = right[j++];
             }
         }
-        while (i < left.length) array[k++] = left[i++];
-        while (j < right.length) array[k++] = right[j++];
+        while (i < left.length) buffer[k++] = left[i++];
+        while (j < right.length) buffer[k++] = right[j++];
+
+        System.arraycopy(buffer, 0, array, 0, buffer.length);
     }
 
     private static void insertionSort(int[] array) {
