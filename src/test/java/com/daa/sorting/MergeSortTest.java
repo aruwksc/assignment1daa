@@ -25,5 +25,5 @@ public class MergeSortTest {
         MergeSort.mergeSort(array);
         assertArrayEquals(new int[]{}, array);
     }
+
 }
-x
