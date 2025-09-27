@@ -2,8 +2,6 @@ package com.daa.sorting;
 
 import com.daa.util.SortUtils;
 
-import java.util.Random;
-
 public class QuickSort {
 
     public static void quickSort(int[] array) {
@@ -22,6 +20,6 @@ public class QuickSort {
     }
 
     public static void shuffleArray(int[] array) {
-        SortUtils.shuffle(array);  // Перемешиваем массив
+        SortUtils.shuffle(array);
     }
 }
