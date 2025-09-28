@@ -6,12 +6,12 @@ import java.util.Arrays;
 public class DeterministicSelect {
 
     public static int deterministicSelect(int[] array, int k) {
-        if (array.length == 0 || k < 0 || k >= array.length) {
+        if (array == null || array.length == 0 || k < 0 || k >= array.length)
             throw new IllegalArgumentException("Invalid array or k");
-        }
 
         Metrics.enterRecursion();
 
+        // edge case: small array
         if (array.length <= 5) {
             Arrays.sort(array);
             Metrics.exitRecursion();
@@ -31,7 +31,7 @@ public class DeterministicSelect {
 
         int pivot = deterministicSelect(medians, medians.length / 2);
 
-        int[] lows  = Arrays.stream(array).filter(x -> x < pivot).toArray();
+        int[] lows = Arrays.stream(array).filter(x -> x < pivot).toArray();
         int[] highs = Arrays.stream(array).filter(x -> x > pivot).toArray();
         int numPivots = array.length - lows.length - highs.length;
 

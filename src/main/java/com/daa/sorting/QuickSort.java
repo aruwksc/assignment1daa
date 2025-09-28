@@ -5,6 +5,7 @@ import com.daa.metrics.Metrics;
 public class QuickSort {
 
     public static void quickSort(int[] array) {
+        if (array == null || array.length <= 1) return; // edge case
         quickSort(array, 0, array.length - 1);
     }
 
@@ -23,7 +24,7 @@ public class QuickSort {
         int i = low - 1;
         for (int j = low; j < high; j++) {
             Metrics.incrementComparison();
-            if (array[j] <= pivot) {
+            if (array[j] <= pivot) { // ensures duplicates handled
                 i++;
                 int temp = array[i]; array[i] = array[j]; array[j] = temp;
             }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class MergeSort {
 
     public static void mergeSort(int[] array) {
+        if (array == null || array.length <= 1) return; // edge case: empty or 1 element
         mergeSort(array, 0, array.length - 1);
     }
 
@@ -29,10 +30,8 @@ public class MergeSort {
             if (array[i] <= array[j]) temp[k++] = array[i++];
             else temp[k++] = array[j++];
         }
-
         while (i <= mid) temp[k++] = array[i++];
         while (j <= right) temp[k++] = array[j++];
-
         System.arraycopy(temp, 0, array, left, temp.length);
     }
 }
