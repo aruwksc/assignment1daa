@@ -1,12 +1,20 @@
 package com.daa.select;
 
+import com.daa.metrics.Metrics;
 import java.util.Arrays;
 
 public class DeterministicSelect {
 
     public static int deterministicSelect(int[] array, int k) {
+        if (array.length == 0 || k < 0 || k >= array.length) {
+            throw new IllegalArgumentException("Invalid array or k");
+        }
+
+        Metrics.enterRecursion();
+
         if (array.length <= 5) {
             Arrays.sort(array);
+            Metrics.exitRecursion();
             return array[k];
         }
 
@@ -23,15 +31,17 @@ public class DeterministicSelect {
 
         int pivot = deterministicSelect(medians, medians.length / 2);
 
+        int[] lows  = Arrays.stream(array).filter(x -> x < pivot).toArray();
+        int[] highs = Arrays.stream(array).filter(x -> x > pivot).toArray();
+        int numPivots = array.length - lows.length - highs.length;
 
-        int[] left = Arrays.stream(array).filter(x -> x < pivot).toArray();
-        int[] right = Arrays.stream(array).filter(x -> x > pivot).toArray();
-        if (k < left.length) {
-            return deterministicSelect(left, k);
-        } else if (k < left.length + right.length) {
-            return pivot;
-        } else {
-            return deterministicSelect(right, k - left.length - 1);
-        }
+        Metrics.incrementComparison();
+        int result;
+        if (k < lows.length) result = deterministicSelect(lows, k);
+        else if (k < lows.length + numPivots) result = pivot;
+        else result = deterministicSelect(highs, k - lows.length - numPivots);
+
+        Metrics.exitRecursion();
+        return result;
     }
 }

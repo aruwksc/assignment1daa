@@ -1,8 +1,16 @@
 package com.daa.benchmark;
 
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Scope;
+
 import com.daa.sorting.MergeSort;
 import com.daa.select.DeterministicSelect;
-import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 import java.util.Arrays;

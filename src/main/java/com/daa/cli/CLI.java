@@ -5,8 +5,6 @@ import com.daa.metrics.Metrics;
 import com.daa.geometry.ClosestPair;
 import com.daa.geometry.ClosestPair.Point;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
 
 public class CLI {
@@ -14,13 +12,12 @@ public class CLI {
     public static void main(String[] args) {
 
         if (args.length == 0) {
-            System.out.println("Usage: java CLI <algorithm> <input> [options]");
+            System.out.println("Usage: java CLI <algorithm> <input>");
             System.exit(1);
         }
 
         String algorithm = args[0];
         String input = args[1];
-
 
         if ("mergesort".equalsIgnoreCase(algorithm)) {
 
@@ -29,11 +26,17 @@ public class CLI {
             System.out.println("Before sorting:");
             printArray(array);
 
+            Metrics.reset(); // сбросим метрики перед запуском
+            long start = System.nanoTime();
             MergeSort.mergeSort(array);
+            long end = System.nanoTime();
 
             System.out.println("After sorting:");
             printArray(array);
-            Metrics.writeMetricsToCSV();
+
+            // Запись метрик в CSV
+            Metrics.writeMetricsToCSV("metrics.csv", "MergeSort", array.length, (end - start)/1e6);
+
         } else if ("closestpair".equalsIgnoreCase(algorithm)) {
 
             String[] points = input.split(",");
@@ -46,33 +49,14 @@ public class CLI {
 
             double closestDistance = ClosestPair.closestPair(pointArray);
             System.out.println("Closest pair distance: " + closestDistance);
+
         } else {
             System.out.println("Unknown algorithm: " + algorithm);
         }
     }
 
-
     private static void printArray(int[] array) {
-        for (int num : array) {
-            System.out.print(num + " ");
-        }
+        for (int num : array) System.out.print(num + " ");
         System.out.println();
-    }
-
-
-    private static void writeCSV(String filename, String[] headers, String[] data) {
-        try (FileWriter writer = new FileWriter(filename)) {
-            for (String header : headers) {
-                writer.append(header).append(",");
-            }
-            writer.append("\n");
-
-            for (String value : data) {
-                writer.append(value).append(",");
-            }
-            writer.append("\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

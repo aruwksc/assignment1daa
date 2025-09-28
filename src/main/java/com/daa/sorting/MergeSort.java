@@ -1,54 +1,38 @@
 package com.daa.sorting;
 
 import com.daa.metrics.Metrics;
-
 import java.util.Arrays;
 
 public class MergeSort {
 
     public static void mergeSort(int[] array) {
-        if (array.length <= 10) {
-            insertionSort(array);
-        } else {
-            if (array.length < 2) return;
-            int mid = array.length / 2;
-            int[] left = Arrays.copyOfRange(array, 0, mid);
-            int[] right = Arrays.copyOfRange(array, mid, array.length);
-
-            mergeSort(left);
-            mergeSort(right);
-
-            merge(array, left, right);
-        }
+        mergeSort(array, 0, array.length - 1);
     }
 
-    private static void merge(int[] array, int[] left, int[] right) {
-        int i = 0, j = 0, k = 0;
-        int[] buffer = new int[left.length + right.length];
-
-        while (i < left.length && j < right.length) {
-            Metrics.incrementComparisons();
-            if (left[i] <= right[j]) {
-                buffer[k++] = left[i++];
-            } else {
-                buffer[k++] = right[j++];
-            }
+    private static void mergeSort(int[] array, int left, int right) {
+        Metrics.enterRecursion();
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+            merge(array, left, mid, right);
         }
-        while (i < left.length) buffer[k++] = left[i++];
-        while (j < right.length) buffer[k++] = right[j++];
-
-        System.arraycopy(buffer, 0, array, 0, buffer.length);
+        Metrics.exitRecursion();
     }
 
-    private static void insertionSort(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            int key = array[i];
-            int j = i - 1;
-            while (j >= 0 && array[j] > key) {
-                array[j + 1] = array[j];
-                j--;
-            }
-            array[j + 1] = key;
+    private static void merge(int[] array, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+
+        while (i <= mid && j <= right) {
+            Metrics.incrementComparison();
+            if (array[i] <= array[j]) temp[k++] = array[i++];
+            else temp[k++] = array[j++];
         }
+
+        while (i <= mid) temp[k++] = array[i++];
+        while (j <= right) temp[k++] = array[j++];
+
+        System.arraycopy(temp, 0, array, left, temp.length);
     }
 }
