@@ -1,40 +1,52 @@
 package com.daa.select;
 
+import com.daa.metrics.Metrics;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeterministicSelectTest {
 
     @Test
-    public void testDeterministicSelect() {
-        int[] array = {10, 80, 30, 90, 40, 50, 70};
-        int k = 3;
-        int result = DeterministicSelect.deterministicSelect(array, k);
-        assertEquals(50, result);
+    void testSelectSimple() {
+        int[] array = {7, 2, 5};
+        Metrics.reset();
+        int median = DeterministicSelect.deterministicSelect(array, 1);
+        assertEquals(5, median);
+        assertTrue(Metrics.getComparisonCount() >= 0);
+        assertTrue(Metrics.getMaxRecursionDepth() > 0);
     }
 
     @Test
-    public void testDeterministicSelectWithSmallArray() {
-        int[] array = {7, 1, 3};
-        int k = 1;
-        int result = DeterministicSelect.deterministicSelect(array, k);
-        assertEquals(3, result);
+    void testSelectWithDuplicates() {
+        int[] array = {3, 1, 3, 2, 2};
+        Metrics.reset();
+        int median = DeterministicSelect.deterministicSelect(array, 2);
+        assertEquals(2, median);
     }
 
     @Test
-    public void testDeterministicSelectWithEmptyArray() {
-        int[] array = {};
-        int k = 0;
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            DeterministicSelect.deterministicSelect(array, k);
+    void testSelectSingleElement() {
+        int[] array = {42};
+        Metrics.reset();
+        int val = DeterministicSelect.deterministicSelect(array, 0);
+        assertEquals(42, val);
+    }
+
+    @Test
+    void testSelectEmptyArray() {
+        int[] empty = {};
+        Metrics.reset();
+        assertThrows(IllegalArgumentException.class, () -> {
+            DeterministicSelect.deterministicSelect(empty, 0);
         });
     }
 
     @Test
-    public void testDeterministicSelectWithSingleElement() {
-        int[] array = {5};
-        int k = 0;
-        int result = DeterministicSelect.deterministicSelect(array, k);
-        assertEquals(5, result);
+    void testSelectLargeArray() {
+        int[] array = {9, 1, 5, 3, 7, 2, 6, 4, 8};
+        Metrics.reset();
+        int val = DeterministicSelect.deterministicSelect(array, 4); // 5-й по порядку
+        assertEquals(5, val);
     }
 }

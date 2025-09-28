@@ -11,3 +11,8 @@ DeterministicSelect,100,0.5093,7,5
 MergeSort,500,0.2929,3844,10
 QuickSort,500,0.3149,4892,20
 DeterministicSelect,500,1.0716,23,7
+MergeSort,6,0.1956,10,4
+MergeSort,6,0.2446,10,4
+MergeSort,6,0.3173,10,4
+MergeSort,6,0.3761,10,4
+MergeSort,6,0.254,10,4
